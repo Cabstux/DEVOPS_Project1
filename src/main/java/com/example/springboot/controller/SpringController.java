@@ -14,7 +14,7 @@ public class SpringController {
 
 	
 
-		String result = "Hello Word Mr Sene";
+		String result = "Hello Word";
 		return result;
 	}
 }
