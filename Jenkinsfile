@@ -1,6 +1,13 @@
 pipeline {
     agent any
 
+    triggers {
+        // Utilisation du Pipeline Webhook Trigger
+        webhook {
+            triggerOnPush: true
+        }
+    }
+
     stages {
         stage('Git Download') {
             steps {
