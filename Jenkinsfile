@@ -7,6 +7,9 @@ pipeline {
             triggerOnPush: true
         }
     }
+        
+
+
     stages {
         stage('Webhook Verification') {
             steps {
@@ -30,9 +33,6 @@ pipeline {
                 }
             }
         }
-
-
-    stages {
         stage('Git Download') {
             steps {
                 git  branch: 'main', url: 'https://github.com/Cabstux/DEVOPS_Project1.git'
@@ -76,6 +76,7 @@ pipeline {
                     nexusUrl: 'localhost:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'DEVOPS-Project1', version: '1.0.1'
                 }
             }
+        }
             def verifyHmacSha1Signature(payload, signature, secret) {
     def mac = javax.crypto.Mac.getInstance('HmacSHA1')
     mac.init(new javax.crypto.spec.SecretKeySpec(secret.bytes, 'HmacSHA1'))
@@ -85,5 +86,5 @@ pipeline {
 
     return signature == computedSignature
         }
-    
+    }  
 }
