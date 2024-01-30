@@ -1,13 +1,8 @@
 pipeline {
     agent any
 
-    options {
-        buildDiscarder(logRotator(numToKeepStr: '10'))
-        disableConcurrentBuilds()
-        skipDefaultCheckout()
-        timestamps()
-        timeout(time: 60, unit: 'MINUTES')
-        webhookToken('b6d6e53a7fb7d60c9445289a5d968') // Remplacez par votre propre secret
+    environment {
+        GITHUB_WEBHOOK_SECRET = credentials('b6d6e53a7fb7d60c9445289a5d968') // Remplacez par la bonne méthode pour récupérer votre secret
     }
     
 
