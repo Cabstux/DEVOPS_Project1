@@ -7,8 +7,6 @@ pipeline {
             triggerOnPush: true
         }
     }
-        
-
 
     stages {
         stage('Webhook Verification') {
@@ -33,11 +31,13 @@ pipeline {
                 }
             }
         }
+        
         stage('Git Download') {
             steps {
-                git  branch: 'main', url: 'https://github.com/Cabstux/DEVOPS_Project1.git'
+                git branch: 'main', url: 'https://github.com/Cabstux/DEVOPS_Project1.git'
             }
         }
+        
         stage('Unit Test') {
             steps {
                 sh '/usr/local/bin/mvn test'
@@ -55,11 +55,11 @@ pipeline {
                 sh '/usr/local/bin/mvn clean install'
             }
         }
+        
         stage('Static Test Analysis') {
             steps {
                 script {
                     //Active static test
-                    /* groovylint-disable-next-line NestedBlockDepth */
                     withSonarQubeEnv(credentialsId: 'token-sonarqube') {
                         sh '/usr/local/bin/mvn clean package sonar:sonar'
                     }
@@ -70,21 +70,21 @@ pipeline {
         stage('Upload artifact to Nexus') {
             steps {
                 script {
-                    /* groovylint-disable-next-line NestedBlockDepth */
                     nexusArtifactUploader artifacts: [[artifactId: 'springboot', classifier: '', 
                     file: 'target/Uber.jar', type: 'jar']], credentialsId: 'auth-nexus', groupId: 'com.example', 
                     nexusUrl: 'localhost:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'DEVOPS-Project1', version: '1.0.1'
                 }
             }
         }
-            def verifyHmacSha1Signature(payload, signature, secret) {
-    def mac = javax.crypto.Mac.getInstance('HmacSHA1')
-    mac.init(new javax.crypto.spec.SecretKeySpec(secret.bytes, 'HmacSHA1'))
-    def hmac = mac.doFinal(payload.bytes)
+    }
 
-    def computedSignature = 'sha1=' + hmac.encodeHex().toString()
+    def verifyHmacSha1Signature(payload, signature, secret) {
+        def mac = javax.crypto.Mac.getInstance('HmacSHA1')
+        mac.init(new javax.crypto.spec.SecretKeySpec(secret.bytes, 'HmacSHA1'))
+        def hmac = mac.doFinal(payload.bytes)
 
-    return signature == computedSignature
-        }
-    }  
+        def computedSignature = 'sha1=' + hmac.encodeHex().toString()
+
+        return signature == computedSignature
+    }
 }
