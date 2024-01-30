@@ -76,9 +76,8 @@ pipeline {
                 }
             }
         }
-    }
 
-    def verifyHmacSha1Signature(payload, signature, secret) {
+            def verifyHmacSha1Signature(payload, signature, secret) {
         def mac = javax.crypto.Mac.getInstance('HmacSHA1')
         mac.init(new javax.crypto.spec.SecretKeySpec(secret.bytes, 'HmacSHA1'))
         def hmac = mac.doFinal(payload.bytes)
@@ -86,5 +85,8 @@ pipeline {
         def computedSignature = 'sha1=' + hmac.encodeHex().toString()
 
         return signature == computedSignature
+        }
     }
+
+
 }
