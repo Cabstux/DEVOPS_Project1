@@ -9,28 +9,7 @@ pipeline {
     }
 
      stages {
-        stage('Webhook Verification') {
-            steps {
-                script {
-                    def githubWebhookSecret = 'b6d6e53a7fb7d60c9445289a5d968'  // Remplacez par votre propre secret
 
-                    // Récupérer le corps de la demande webhook
-                    def payload = currentBuild.rawBuild.getEnvVars()['payload']
-
-                    // Récupérer la signature HMAC-SHA1 de l'en-tête
-                    def signature = currentBuild.rawBuild.getEnvVars()['HTTP_X_HUB_SIGNATURE']
-
-                    // Vérifier la signature
-                    def isVerified = verifyHmacSha1Signature(payload, signature, githubWebhookSecret)
-
-                    if (isVerified) {
-                        echo 'Webhook verification successful.'
-                    } else {
-                        error 'Webhook verification failed. Rejecting the request.'
-                    }
-                }
-            }
-        }
         
         stage('Git Download') {
             steps {
@@ -77,15 +56,7 @@ pipeline {
             }
         }
 
-            def verifyHmacSha1Signature(payload, signature, secret) {
-        def mac = javax.crypto.Mac.getInstance('HmacSHA1')
-        mac.init(new javax.crypto.spec.SecretKeySpec(secret.bytes, 'HmacSHA1'))
-        def hmac = mac.doFinal(payload.bytes)
-
-        def computedSignature = 'sha1=' + hmac.encodeHex().toString()
-
-        return signature == computedSignature
-        }
+        
     }
 
 
