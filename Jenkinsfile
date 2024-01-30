@@ -8,7 +8,7 @@ pipeline {
         }
     }
 
-    stages {
+     stages {
         stage('Webhook Verification') {
             steps {
                 script {
